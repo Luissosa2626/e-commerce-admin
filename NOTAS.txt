@@ -1,0 +1,63 @@
+INSTALAR NEXT JS
+yarn create next-app .  (con el . indicamos para que se cree hay mismo)
+	- Solo instalo esLint, no Router, ni typeScript ni nada (En este caso, despues hacerlo con estos para probar)
+
+Instalar TailWind Next JS
+- Buscar tailwind next js - 1er enlace
+- yarn add tailwindcss postcss autoprefixer
+- npx tailwindcss init -p
+- En el tailwind.config.js cambio el content por lo que dice en la documentacion
+- En el global.css lo cambio por lo que dice la documentacion
+
+AUTHENTICATION
+- Buscar next auth (https://next-auth.js.org/) (https://next-auth.js.org/providers/google)
+- yarn add next-auth
+- Creo la carpeta pages>api>auth y dentro creo el archivo [...nextauth].js (asi como esta escrito con []) y pego lo de server de la documentacion
+- Creo el archivo .env
+- Google Cloud Console(Para la autenticacion con Google)
+	- Creo un nuevo proyecto, luego API y servicio, credenciales, configurar pantalla de consentimiento
+
+
+
+
+
+NOTAS IMPORTANTES:
+- En Layout.js pongo una prop y la defino en el return para cuando llamen a Layout desde otro componente, lo que pongas en ese otro componente llamando a Layout es quien se llamara.
+- En pages>api (los archivos aqui son los endpoint que apunto con axios y tienen la logica para llamar el backend que a su vez se conecta con la carpeta models que tiene la logica crear el esquema en MongoDB) (ESTO ES SUMAMENTE IMPORTANTE ENTENDERLO [ESTUDIARLO DETENIDAMENTE])
+
+- Desde que se hace algo que afecte la BD se debe reiniciar el ambiente
+- Para crear acciones o darle click a botones en React lo mejor es manejar estados. (Para cada boton del form o cualquier accion se maneja con estados [useState])
+- Al usar onClick llamo la funcion sola si es un boton. SI tiene parametros o si es un type="text" se utiliza () => funcion(e.target.value)
+- Al agregar un map lo creo con map(prop => ()) si es dentro del return [comas] si es para iterar array con {} [llaves] fuera del return o arriba del return 
+- Agregar o eliminar admins esta en api>auth>nextauth.js
+
+AWS S3 - Lo usamos para guardar las rutas relativas de las imagenes que se suban y salgan con el dominio de AWS
+https://us-east-2.console.aws.amazon.com/console/home?region=us-east-2#
+https://s3.console.aws.amazon.com/s3/bucket/create?region=us-east-2
+
+Nuestro amigos de novalproperties nos traen una sorpresa y se que querras ser parte.
+
+
+YARN
+multiparty - Para trabajar con multiple FormData (especialmente a la hora de subir imagenes)
+axios - parecido al fetch 
+next-auth - libreria de next para autenticaciones
+@aws-sdk/client-s3 - paquete de AWS para guardar nuestras direcciones relativas de las imagenes subidas al ecommerce
+mime-types - read files and exchange
+react-spinners - Buscando en yarnpkg para hacer spinners con react (https://www.davidhu.io/react-spinners/)
+react-sortablejs
+react-sweetalert2 - para mostrar un popUp (lo uso para hacer el borrado en categories)
+
+Technologias Utilizadas
+HTML5,
+CSS (TailWind),
+ReactJs
+NextJs,
+MongoDB
+Amazon S3
+
+Abrir los buckets de AWS - Console AWS 
+Mongo DB Atlas
+Heroicons
+
+Natividad esterling- 849-359-1413 - 3 habs
