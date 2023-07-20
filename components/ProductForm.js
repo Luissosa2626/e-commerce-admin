@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Spinner from "./Spinner";
+import Spinner from "@/components/Spinner";
 import { ReactSortable } from "react-sortablejs";
 
 export default function ProductForm({
@@ -21,17 +21,18 @@ export default function ProductForm({
     const [price, setPrice] = useState(existingPrice || '')
     const [images, setImages] = useState(existingImages || [])
 
-    // Para volver a Add new product nuevamente
     const [goToProducts, setGoToProducts] = useState(false)
     const [isUploading, setIsUploading] = useState(false)
 
     const [categories, setCategories] = useState([])
+    const [categoriesLoading, setCategoriesLoading] = useState(false)
     const router = useRouter()
 
-    // Uso esto para poder llamar o traer toda la informacion de Categories a este componente de Products
     useEffect(() => {
+        setCategoriesLoading(true)
         axios.get('/api/categories').then(result => {
             setCategories(result.data)
+            setCategoriesLoading(false)
         })
     }, [])
 
@@ -39,7 +40,6 @@ export default function ProductForm({
         e.preventDefault()
         const data = {title, description, price, images, category, properties:productProperties}
         if(_id) {
-            // Para editar 
             await axios.put('/api/products', {...data, _id})
         } else {
             await axios.post('/api/products', data)
@@ -47,7 +47,7 @@ export default function ProductForm({
         setGoToProducts(true)
     }
 
-    // Es solo routing para volver atras
+    // go back routing
     if(goToProducts) {
         router.push('/products')
     }
@@ -66,12 +66,6 @@ export default function ProductForm({
                 return [...oldImages, ...res.data.links]
             })
             setIsUploading(false)
-            // (FUNCIONA LO DE ABAJO PERO CONTINUO CON AXIOS)
-            // const res = await fetch('/api/upload', {
-            //     method: 'POST',
-            //     body: data,
-            // })
-            // console.log(res);
         }
     }
 
@@ -91,7 +85,6 @@ export default function ProductForm({
     const propertiesToFill = []
     if(categories.length > 0 && category) {
        let catInfo = categories.find(({_id}) => _id === category)
-        // console.log({catInfo})
         propertiesToFill.push(...catInfo.properties)
         while(catInfo?.parent?._id) {
             const parentCat = categories.find(({_id}) => _id === catInfo?.parent?._id)
@@ -111,6 +104,9 @@ export default function ProductForm({
                     <option value={c._id}>{c.name}</option>
                 ))}
             </select>
+            {categoriesLoading && (
+                <Spinner/>
+            )}
             {propertiesToFill.length > 0 && propertiesToFill.map(p =>(
                 <div className="">
                     <label>{p.name[0].toUpperCase() + p.name.substring(1)}</label>  {/*Para convertir la 1ra letra en mayuscula */}

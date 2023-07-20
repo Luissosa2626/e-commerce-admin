@@ -2,6 +2,7 @@ import Layout from "@/components/Layout";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { withSwal } from "react-sweetalert2"
+import Spinner from "@/components/Spinner";
 
 function Categories({swal}) {
     const [editedCategory, setEditedCategory] = useState(null)
@@ -9,6 +10,7 @@ function Categories({swal}) {
     const [parentCategory, setParentCategory] = useState('')
     const [categories, setCategories] = useState([])
     const [properties, setProperties] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         fetchCategories();
@@ -16,10 +18,12 @@ function Categories({swal}) {
 
     // Creo esta funcion y la pongo dentro del useEffect para que se ejecute una vez y luego en saveCategory para que se refresque automaticamente
     function fetchCategories() {
+        setIsLoading(true)
         axios.get('/api/categories').then(result => {
             // console.log(result); // Este result contiene un parametro llamado data donde esta el nombre de las categories que lo usare para crear parte de la tabla
             // El get esta en pages>api
             setCategories(result.data)
+            setIsLoading(false)
         })
     }
 
@@ -65,25 +69,24 @@ function Categories({swal}) {
             confirmButtonColor: '#d55',
             reverseButtons: true
         }).then(async result => {
-            // console.log(result);    // Tiene la propiedad isConfirmed para saber si se dio click en borrar
+            // console.log(result); 
             if(result.isConfirmed) {
                 const {_id} = category
                 await axios.delete('/api/categories?_id='+_id )
-                fetchCategories()   //Llamo esto por que refresca el contenido, es decir lo llama de nuevo. Por eso esta en un useEffect
+                fetchCategories()   //Refresh de datos
             }
         })
     }
 
     function addProperty(e) {
         setProperties(prev => {
-           return [...prev, {name: '', value: ''}]  //Agregar un objeto, no esta llamando a nadie solo creando un objeto
+           return [...prev, {name: '', value: ''}] 
         })
     }
 
     function handlePropertyNameChange(index, property, newName) {
-        // console.log(index, property, newName);
         setProperties(prev => {
-            const properties = [...prev]    //Me traiga el objeto completo
+            const properties = [...prev] 
             properties[index].name = newName
             return properties
         })
@@ -158,6 +161,15 @@ function Categories({swal}) {
                     </tr>
                 </thead>
                 <tbody>
+                    {isLoading && (
+                        <tr>
+                            <td colSpan={3}>
+                                <div className="py-4">
+                                    <Spinner fullWidth={true}/>
+                                </div>
+                            </td>
+                        </tr>
+                    )}
                     {categories.length > 0 && categories.map(category => (
                         <tr>
                             <td>{category.name}</td>

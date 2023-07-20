@@ -8,7 +8,7 @@ export default function DeleteProductPage() {
     const [productInfo, setProductInfo] = useState()
     const {id} = router.query
 
-    // Obtener el id desde el URL para el producto que quiero, por eso desestrucutro el id
+    // Obtener el id desde el URL por producto deseado, desestructurar id
     useEffect(() => {
         if(!id) {
             return

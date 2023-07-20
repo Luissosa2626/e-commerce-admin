@@ -1,11 +1,9 @@
 import { Category } from "@/models/Category";
 import {mongooseConnect} from "@/lib/mongoose";
 import { getServerSession } from "next-auth";
-// import { authOptions, isAdminRequest } from "./auth/[...nextauth]";
 import {authOptions, isAdminRequest} from "@/pages/api/auth/[...nextauth]";
 
-// IMPORTAR SIEMPRE MONGOOSECONNECT 
-// Es ASYNC por que hay que esperar que la base de datos devuelva una respuesta
+// IMPORT MONGOOSECONNECT 
 export default async function handle(req, res) {
     const { method } = req;
     await mongooseConnect();
@@ -27,8 +25,7 @@ export default async function handle(req, res) {
         res.json(categoryDoc)
     }
 
-    // Para actualizar la data
-    // COn updateOne se puede pasar otro parametro para saber cualquier debe actualizar 1ro, en este caso es el objeto {_id}
+    // updateOne puede pasar otro parametro para actualizar 1ro, {_id} object
     if(method === 'PUT') {
         const {name, parentCategory, properties, _id} = req.body;
         const categoryDoc = await Category.updateOne({_id},{
